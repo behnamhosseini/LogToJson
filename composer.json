@@ -2,7 +2,7 @@
     "name": "behnamhosseini/log-to-json",
     "description": "conver laravel logs format to json",
     "keywords": ["log", "log-to-json", "logging", "laravel", "lumen"],
-    "type": "laravel-package",
+    "homepage": "https://github.com/behnamtakta71/LogToJson",
     "authors": [
         {
             "name": "behnamhosseini",
@@ -10,24 +10,19 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "illuminate/support": "4.2.*|5.*|^6.0|^7.0|^8.0"
+        "php": "^7.1.3|7.2.*|7.3.*|7.4.*|8.*",
+        "laravel/framework":"~5.1|6.*|7.*|8.*"
     },
     "autoload": {
-        "classmap": [
-            "src/"
-        ],
-        "psr-0": {
+        "psr-4": {
             "Behnamhosseini\\LogToJson\\": "src/"
         }
     },
-
     "extra": {
         "laravel": {
             "providers": [
-                "Providers\\LogServiceProvider"
+                "Behnamhosseini\\LogToJson\\Providers\\LogServiceProvider"
             ]
         }
-    },
-    "minimum-stability": "stable"
+    }
 }
