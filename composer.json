@@ -1,5 +1,5 @@
 {
-    "name": "behnamhosseini/LogToJson",
+    "name": "behnamhosseini/log-to-json",
     "description": "conver laravel logs format to json",
     "keywords": ["log", "log-to-json", "logging", "laravel", "lumen"],
     "type": "laravel-package",
