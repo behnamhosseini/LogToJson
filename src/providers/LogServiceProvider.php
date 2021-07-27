@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Providers;
+namespace Behnamhosseini\LogToJson\Providers;
 
-use App\Classes\LogManager;
 use Illuminate\Support\ServiceProvider;
+use Behnamhosseini\LogToJson\LogManager;
 
 class LogServiceProvider extends ServiceProvider
 {

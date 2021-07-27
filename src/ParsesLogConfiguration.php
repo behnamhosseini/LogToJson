@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace Behnamhosseini\LogToJson;
 
 use InvalidArgumentException;
 use Monolog\Logger as Monolog;

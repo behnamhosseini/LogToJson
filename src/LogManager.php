@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Classes;
+namespace Behnamhosseini\LogToJson;
 
 use Illuminate\Log\LogManager as LM;
 

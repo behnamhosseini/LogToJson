@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Classes;
+namespace Behnamhosseini\LogToJson;
 
 use Exception;
 use Psr\Log\LoggerInterface;

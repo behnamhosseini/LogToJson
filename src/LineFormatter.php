@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Classes;
+namespace Behnamhosseini\LogToJson;
 
 
 use Monolog\Formatter\NormalizerFormatter;
