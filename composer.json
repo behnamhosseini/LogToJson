@@ -29,5 +29,6 @@
                 "Behnamhosseini\\LogToJson\\Providers\\LogServiceProvider"
             ]
         }
-    }
+    },
+    "minimum-stability": "dev"
 }
