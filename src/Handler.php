@@ -25,7 +25,6 @@ class Handler extends ExceptionHandler
             throw $e;
         }
         $content=['file'=>$e->getFile(),'message'=>$e->getMessage(),'code'=>$e->getCode()];
-
         $logger->error(
             $e->getMessage(),
             array_merge($this->context(), ['exception' => $content]
