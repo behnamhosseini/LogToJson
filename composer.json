@@ -16,7 +16,7 @@
         "classmap": [
             "src/"
         ],
-        "psr-0": {
+        "psr-4": {
             "Behnamhosseini\\LogToJson\\": "src/"
         }
     },
