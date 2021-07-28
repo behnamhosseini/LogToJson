@@ -6,7 +6,7 @@ Laravel log to json
 
 
 ## Description
-Convert Laravel logs output to json
+Convert Laravel logs to json
 
 ## <g-emoji class="g-emoji" alias="arrow_down" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2b07.png">⬇️</g-emoji> Installation
 
