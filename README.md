@@ -3,15 +3,10 @@ Laravel log to json
 
 
 [![Author](https://img.shields.io/static/v1?label=Author&message=linkedin&color=<BLUE>)](https://www.linkedin.com/in/behnam-hoseyni-904949164/)
-[![Required Laravel Version][ico-laravel]][link-packagist]
-[![Required PHP Version][ico-php]][link-packagist]
-[![Latest Version on Packagist][ico-version]][link-packagist]
-[![Quality Score][ico-code-quality]][link-code-quality]
-[![Total Downloads][ico-downloads]][link-downloads]
-[![Today Downloads][ico-today-downloads]][link-downloads]
+
 
 ## Description
-Convert Laravel log output to json
+Convert Laravel logs output to json
 
 ## <g-emoji class="g-emoji" alias="arrow_down" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2b07.png">⬇️</g-emoji> Installation
 
