@@ -2,6 +2,7 @@
 
 namespace App\Facades;
 
+use Behnamhosseini\LogToJson\Logger;
 use Illuminate\Support\Facades\Facade;
 
 /**
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static mixed channel(string $channel = null)
  * @method static \Psr\Log\LoggerInterface stack(array $channels, string $channel = null)
  *
- * @see \Illuminate\Log\Logger
+ * @see Logger
  */
 class Log extends Facade
 {
@@ -28,7 +29,6 @@ class Log extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        dd('App\Facades');
         return 'log';
     }
 }

@@ -18,7 +18,7 @@ composer require behnamhosseini/log-to-json
 
 You may also publish config file:
 ```
-php artisan vendor:publish
+php artisan vendor:publish --provider=Behnamhosseini\LogToJson\Providers\LogServiceProvider
 ```
 
 ## Usage

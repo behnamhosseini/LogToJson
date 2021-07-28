@@ -12,8 +12,15 @@ class LogServiceProvider extends ServiceProvider
      *
      * @return void
      */
+    public function boot(){
+        $this->publishes([
+            __DIR__.'/../config/config.php' => config_path('logToJson.php'),
+        ]);
+    }
     public function register()
     {
+        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'logToJson');
+
         $this->app->extend('log', function () {
             return  new LogManager($this->app);
         });
