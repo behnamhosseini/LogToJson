@@ -11,8 +11,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/support": "4.2.*|5.*|^6.0|^7.0|^8.0",
-        "monolog/monolog": "^1.12"
+        "illuminate/support": "4.2.*|5.*|^6.0|^7.0|^8.0"
     },
     "autoload": {
         "classmap": [
