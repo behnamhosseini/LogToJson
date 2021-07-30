@@ -61,8 +61,9 @@ class LineFormatter extends NormalizerFormatter
      */
     public function format(array $record)
     {
-
         $config = config('logToJson');
+
+        $content=[];
         if ($config['toJson']) {
             $content['json'] = $this->jsonFormat($record,$config);
         };
@@ -78,6 +79,7 @@ class LineFormatter extends NormalizerFormatter
         if ($vars['level_name'] == 'ERROR') {
             unset($vars['message']);
         };
+
         if (isset($vars['context']['json'])) {
             $vars = array_merge($vars, $vars['context']['normal']);
         }
@@ -88,6 +90,10 @@ class LineFormatter extends NormalizerFormatter
             unset($vars['context']['exception']);
         }
         $output = $this->format;
+
+        if ($vars['level_name'] != 'ERROR') {
+            $output=str_replace('%file%','',$output);
+        };
 
         foreach ($vars['extra'] as $var => $val) {
             if (false !== strpos($output, '%extra.' . $var . '%')) {
@@ -119,7 +125,9 @@ class LineFormatter extends NormalizerFormatter
             unset($vars['context']['exception']);
         }
         $output = $this->format;
-
+        if ($vars['level_name'] != 'ERROR') {
+            $output=str_replace('%file%','',$output);
+        };
         foreach ($vars['extra'] as $var => $val) {
             if (false !== strpos($output, '%extra.'.$var.'%')) {
                 $output = str_replace('%extra.'.$var.'%', $this->stringify($val), $output);
