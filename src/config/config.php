@@ -6,9 +6,7 @@ return [
      */
     'toJson' => true,
     'normal' => true,
-    /**
-     * Values to display in the log.
-     */
+
 
     'toJson-data' => [
         'message',
@@ -17,7 +15,6 @@ return [
         'line',
     ],
 
-    'normal-data-all' => true,
 
     'normal-data' => [
         'message',

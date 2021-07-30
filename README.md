@@ -8,6 +8,9 @@ Laravel log to json
 ## Description
 Convert Laravel logs output to json
 
+Ability to create log files in two modes.
+Just select the desired output in the config file.
+
 ## <g-emoji class="g-emoji" alias="arrow_down" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/2b07.png">⬇️</g-emoji> Installation
 
 You can install the package via composer:
