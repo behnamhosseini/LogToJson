@@ -61,26 +61,33 @@ class LineFormatter extends NormalizerFormatter
      */
     public function format(array $record)
     {
+
         $config = config('logToJson');
         if ($config['toJson']) {
-            $content['json'] = $this->jsonFormat($record);
+            $content['json'] = $this->jsonFormat($record,$config);
         };
         if ($config['normal']) {
-            $content['normal'] = $this->defultFormat($record);
+            $content['normal'] = $this->defultFormat($record,$config);
         }
         return $content;
     }
 
-    public function jsonFormat($record)
+    public function jsonFormat($record,$config)
     {
         $vars = parent::format($record);
         if ($vars['level_name'] == 'ERROR') {
             unset($vars['message']);
         };
         if (isset($vars['context']['json'])) {
-            $vars = array_merge($vars, $vars['context']['json']);
+            $vars = array_merge($vars, $vars['context']['normal']);
         }
-        unset($vars['context']);
+        unset($vars['context']['json']);
+        unset($vars['context']['normal']);
+
+        if (!$config['json-detail']){
+            unset($vars['context']['exception']);
+        }
+        $output = $this->format;
 
         foreach ($vars['extra'] as $var => $val) {
             if (false !== strpos($output, '%extra.' . $var . '%')) {
@@ -92,23 +99,25 @@ class LineFormatter extends NormalizerFormatter
         if (isset($vars['context']['json'])) {
             $vars = array_reverse($vars);
         }
-
         return json_encode($vars);
     }
 
-    public function defultFormat($record)
+    public function defultFormat($record,$config)
     {
-
         $vars = parent::format($record);
 
         if ($vars['level_name'] == 'ERROR') {
             unset($vars['message']);
         };
         if (isset($vars['context']['normal'])) {
-            $vars = array_merge($vars, $vars['context']['json']);
+            $vars = array_merge($vars, $vars['context']['normal']);
         }
-        unset($vars['context']);
+        unset($vars['context']['json']);
+        unset($vars['context']['normal']);
 
+        if (!$config['normal-detail']){
+            unset($vars['context']['exception']);
+        }
         $output = $this->format;
 
         foreach ($vars['extra'] as $var => $val) {
@@ -137,6 +146,7 @@ class LineFormatter extends NormalizerFormatter
                 $output = str_replace('%extra%', '', $output);
             }
         }
+
         foreach ($vars as $var => $val) {
             if (false !== strpos($output, '%'.$var.'%')) {
                 $output = str_replace('%'.$var.'%', $this->stringify($val), $output);

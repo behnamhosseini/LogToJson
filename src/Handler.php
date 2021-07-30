@@ -69,7 +69,7 @@ class Handler extends ExceptionHandler
         }
         $content['json']=$json;
         $content['normal']=$normal;
-        $content['exception']=$normal;
+        $content['exception']=$e;
         return $content;
     }
 }

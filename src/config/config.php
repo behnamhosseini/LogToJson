@@ -7,6 +7,9 @@ return [
     'toJson' => true,
     'normal' => true,
 
+    'json-detail' => true,
+    'normal-detail' => true,
+
 
     'toJson-data' => [
         'message',
