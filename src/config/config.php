@@ -2,10 +2,10 @@
 
 return [
     /**
-     * To enable or disable.
+     * To enable json export.
      */
     'toJson' => true,
-
+    'normal' => true,
     /**
      * Values to display in the log.
      */
@@ -16,4 +16,14 @@ return [
         'file',
         'line',
     ],
+
+    'normal-data-all' => true,
+
+    'normal-data' => [
+        'message',
+        'code',
+        'file',
+        'line',
+    ],
+
 ];

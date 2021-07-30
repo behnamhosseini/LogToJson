@@ -13,9 +13,7 @@ class Handler extends ExceptionHandler
     {
         $config = config('logToJson');
         $this->validateConfig($config);
-        if (!$config['toJson']){
-            parent::report($e);
-        }
+
         if ($this->shouldntReport($e)) {
             return;
         }
@@ -28,10 +26,9 @@ class Handler extends ExceptionHandler
             $logger = $this->container->make(LoggerInterface::class);
         } catch (Exception $ex) {
             throw $ex;
-        }
-        if ($config['toJson']) {
-            $logger->error('',$this->content($e,$config));
-        }
+        };
+        $content=$this->content($e,$config);
+        $logger->error('',$content);
     }
 
     private function validateConfig($config)
@@ -50,14 +47,29 @@ class Handler extends ExceptionHandler
     }
 
     private function content($e,$config) : array {
-        $content=[];
-        foreach ($config['toJson-data'] as $value) {
-            $method='get'.(strToUpper($value));
-            if (!method_exists($e,$method)) {
-                throw new \ErrorException('The value you selected to create in the log file is incorrect');
+        $json=[];
+        $normal=[];
+        if ($config['toJson']){
+            foreach ($config['toJson-data'] as $value) {
+                $method='get'.(strToUpper($value));
+                if (!method_exists($e,$method)) {
+                    throw new \ErrorException('The value you selected to create in the log file is incorrect');
+                }
+                $json[$value] = $e->$method();
             }
-            $content[$value] = $e->$method();
         }
+        if ($config['toJson']){
+            foreach ($config['normal-data'] as $value) {
+                $method='get'.(strToUpper($value));
+                if (!method_exists($e,$method)) {
+                    throw new \ErrorException('The value you selected to create in the log file is incorrect');
+                }
+                $normal[$value] = $e->$method();
+            }
+        }
+        $content['json']=$json;
+        $content['normal']=$normal;
+        $content['exception']=$normal;
         return $content;
     }
 }

@@ -3,10 +3,12 @@
 namespace Behnamhosseini\LogToJson;
 
 use InvalidArgumentException;
-use Monolog\Logger as Monolog;
+use Behnamhosseini\LogToJson\Monolog\Logger as Monolog;
 
 trait ParsesLogConfiguration
 {
+
+
     /**
      * The Log levels.
      *

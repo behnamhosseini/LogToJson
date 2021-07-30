@@ -17,7 +17,7 @@ use Monolog\Utils;
  */
 class LineFormatter extends NormalizerFormatter
 {
-    const SIMPLE_FORMAT = "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n";
+    const SIMPLE_FORMAT = "[%datetime%] %level_name%: %message% %file% %context% %extra%  \n";
 
     protected $format;
     protected $allowInlineLineBreaks;
@@ -62,86 +62,52 @@ class LineFormatter extends NormalizerFormatter
     public function format(array $record)
     {
         $config = config('logToJson');
-        return $config['toJson'] ? $this->jsonFormat($record) : $this->defultFormat($record);
+        if ($config['toJson']) {
+            $content['json'] = $this->jsonFormat($record);
+        };
+        if ($config['normal']) {
+            $content['normal'] = $this->defultFormat($record);
+        }
+        return $content;
     }
 
-    public function jsonFormat($record){
+    public function jsonFormat($record)
+    {
         $vars = parent::format($record);
-        if (['level_name'] == 'error') {
+        if ($vars['level_name'] == 'ERROR') {
             unset($vars['message']);
         };
-        $vars=array_merge($vars,$vars['context']);
+        if (isset($vars['context']['json'])) {
+            $vars = array_merge($vars, $vars['context']['json']);
+        }
         unset($vars['context']);
 
-        $output = $this->format;
         foreach ($vars['extra'] as $var => $val) {
             if (false !== strpos($output, '%extra.' . $var . '%')) {
                 $output = str_replace('%extra.' . $var . '%', $this->stringify($val), $output);
                 unset($vars['extra'][$var]);
             }
         }
-        
 
-        if ($this->ignoreEmptyContextAndExtra) {
-            if (empty($vars['context'])) {
-                unset($vars['context']);
-                $output = str_replace('%context%', '', $output);
-            }
-
-            if (empty($vars['extra'])) {
-                unset($vars['extra']);
-                $output = str_replace('%extra%', '', $output);
-            }
+        if (isset($vars['context']['json'])) {
+            $vars = array_reverse($vars);
         }
 
-        $content = [];
-        if ($vars['level_name'] == 'ERROR') {
-            $arrays = explode('),', $vars['message']);
-            foreach ($arrays as $key => $array) {
-                $array = str_replace('array (', '', $array);
-                $array = str_replace(')', '', $array);
-                $array = str_replace($key . ' =>', '', $array);
-                $array = str_replace("\n", '', $array);
-                $array = str_replace(" ", '', $array);
-                $array = str_replace(")", '', $array);
-                $array = str_replace(",", '', $array);
-                $array = str_replace("'file'=>", '', $array);
-                $array = str_replace("'message'=>", '', $array);
-                $array = str_replace("'code'=>", '', $array);
-                $array = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $array);
-                if (strlen($array) > 0) {
-                    if ($key == 0) {
-                        $content['file'] = $array;
-                    }
-                    if ($key == 1) {
-                        $content['message'] = $array;
-                    }
-                    if ($key == 2) {
-                        $content['code'] = $array;
-                    }
-                }
-            }
-            $vars=array_merge($content,$vars);
-        }
-        foreach ($vars as $var => $val) {
-            if (false !== strpos($output, '%' . $var . '%')) {
-                $output = str_replace('%' . $var . '%', json_encode($this->stringify($val)), $output);
-            }
-        }
-
-        // remove leftover %extra.xxx% and %context.xxx% if any
-        if (false !== strpos($output, '%')) {
-            $output = preg_replace('/%(?:extra|context)\..+?%/', '', $output);
-        }
-
-        $vars=array_reverse($vars);
-        $vars=str_replace('\\\\','\\',json_encode($vars));
-        $vars=str_replace('\\\\','\\',$vars);
-        return $vars;
+        return json_encode($vars);
     }
 
-    public function defultFormat($record){
+    public function defultFormat($record)
+    {
+
         $vars = parent::format($record);
+
+        if ($vars['level_name'] == 'ERROR') {
+            unset($vars['message']);
+        };
+        if (isset($vars['context']['normal'])) {
+            $vars = array_merge($vars, $vars['context']['json']);
+        }
+        unset($vars['context']);
 
         $output = $this->format;
 
@@ -153,12 +119,12 @@ class LineFormatter extends NormalizerFormatter
         }
 
 
-        foreach ($vars['context'] as $var => $val) {
-            if (false !== strpos($output, '%context.'.$var.'%')) {
-                $output = str_replace('%context.'.$var.'%', $this->stringify($val), $output);
-                unset($vars['context'][$var]);
-            }
-        }
+//        foreach ($vars['context'] as $var => $val) {
+//            if (false !== strpos($output, '%context.'.$var.'%')) {
+//                $output = str_replace('%context.'.$var.'%', $this->stringify($val), $output);
+//                unset($vars['context'][$var]);
+//            }
+//        }
 
         if ($this->ignoreEmptyContextAndExtra) {
             if (empty($vars['context'])) {
@@ -171,7 +137,6 @@ class LineFormatter extends NormalizerFormatter
                 $output = str_replace('%extra%', '', $output);
             }
         }
-
         foreach ($vars as $var => $val) {
             if (false !== strpos($output, '%'.$var.'%')) {
                 $output = str_replace('%'.$var.'%', $this->stringify($val), $output);
@@ -182,7 +147,6 @@ class LineFormatter extends NormalizerFormatter
         if (false !== strpos($output, '%')) {
             $output = preg_replace('/%(?:extra|context)\..+?%/', '', $output);
         }
-
         return $output;
     }
 

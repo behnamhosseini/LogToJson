@@ -2,6 +2,7 @@
 
 namespace Behnamhosseini\LogToJson\Providers;
 
+use Behnamhosseini\LogToJson\Monolog\Logger;
 use Illuminate\Support\ServiceProvider;
 use Behnamhosseini\LogToJson\LogManager;
 
@@ -19,6 +20,7 @@ class LogServiceProvider extends ServiceProvider
     }
     public function register()
     {
+
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'logToJson');
 
         $this->app->extend('log', function () {
