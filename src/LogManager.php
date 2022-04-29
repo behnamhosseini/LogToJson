@@ -7,7 +7,7 @@ use Illuminate\Log\LogManager as LM;
 use Behnamhosseini\LogToJson\ParsesLogConfiguration;
 use Behnamhosseini\LogToJson\Monolog\RotatingFileHandler;
 use Behnamhosseini\LogToJson\Monolog\Logger as Monolog;
-use Behnamhosseini\LogToJson\StreamHandler;
+use Behnamhosseini\LogToJson\Monolog\StreamHandler;
 class LogManager extends LM
 {
     use ParsesLogConfiguration;
