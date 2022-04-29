@@ -7,7 +7,8 @@ use Illuminate\Log\LogManager as LM;
 use Behnamhosseini\LogToJson\ParsesLogConfiguration;
 use Behnamhosseini\LogToJson\Monolog\RotatingFileHandler;
 use Behnamhosseini\LogToJson\Monolog\Logger as Monolog;
-use Behnamhosseini\LogToJson\Monolog\StreamHandler;
+use  Behnamhosseini\LogToJson\Monolog\StreamHandler;
+
 class LogManager extends LM
 {
     use ParsesLogConfiguration;
@@ -34,7 +35,7 @@ class LogManager extends LM
     protected function createEmergencyLogger()
     {
         return new Logger(new Monolog('laravel', $this->prepareHandlers([new StreamHandler(
-            $this->app->storagePath().'/logs/laravel.log', $this->level(['level' => 'debug'])
+            $this->app->storagePath() . '/logs/laravel.log', $this->level(['level' => 'debug'])
         )])), $this->app['events']);
     }
 
@@ -59,6 +60,7 @@ class LogManager extends LM
             });
         }
     }
+
     protected function createDailyDriver(array $config)
     {
         return new Monolog($this->parseChannel($config), [
@@ -81,7 +83,8 @@ class LogManager extends LM
             return $this->callCustomCreator($config);
         }
 
-        $driverMethod = 'create'.ucfirst($config['driver']).'Driver';
+        $driverMethod = 'create' . ucfirst($config['driver']) . 'Driver';
+
         if (method_exists($this, $driverMethod)) {
             return $this->{$driverMethod}($config);
         }
@@ -152,9 +155,9 @@ class LogManager extends LM
 
     protected function createMonologDriver(array $config)
     {
-        if (! is_a($config['handler'], HandlerInterface::class, true)) {
+        if (!is_a($config['handler'], HandlerInterface::class, true)) {
             throw new InvalidArgumentException(
-                $config['handler'].' must be an instance of '.HandlerInterface::class
+                $config['handler'] . ' must be an instance of ' . HandlerInterface::class
             );
         }
 
@@ -168,6 +171,7 @@ class LogManager extends LM
             $this->app->make($config['handler'], $with), $config
         )]);
     }
+
     protected function prepareHandlers(array $handlers)
     {
         foreach ($handlers as $key => $handler) {
@@ -180,8 +184,8 @@ class LogManager extends LM
     /**
      * Prepare the handler for usage by Monolog.
      *
-     * @param  \Monolog\Handler\HandlerInterface  $handler
-     * @param  array  $config
+     * @param \Monolog\Handler\HandlerInterface $handler
+     * @param array $config
      * @return \Monolog\Handler\HandlerInterface
      */
 
@@ -206,7 +210,6 @@ class LogManager extends LM
     {
         $this->app['config']['logging.default'] = $name;
     }
-
 
 
     public function emergency($message, array $context = [])
@@ -238,10 +241,12 @@ class LogManager extends LM
     {
         $this->driver()->notice($message, $context);
     }
+
     public function info($message, array $context = [])
     {
         $this->driver()->info($message, $context);
     }
+
     public function debug($message, array $context = [])
     {
         $this->driver()->debug($message, $context);
@@ -251,6 +256,7 @@ class LogManager extends LM
     {
         $this->driver()->log($level, $message, $context);
     }
+
     public function __call($method, $parameters)
     {
         return $this->driver()->$method(...$parameters);

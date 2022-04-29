@@ -6,6 +6,7 @@ namespace Behnamhosseini\LogToJson;
 
 use Monolog\Formatter\NormalizerFormatter;
 use Monolog\Utils;
+use Throwable;
 
 /**
  * Formats incoming records into a one-line string
@@ -183,26 +184,49 @@ class LineFormatter extends NormalizerFormatter
         return $this->replaceNewlines($this->convertToString($value));
     }
 
-    protected function normalizeException($e)
+    protected function normalizeException(Throwable $e, int $depth = 0)
     {
-        // TODO 2.0 only check for Throwable
-        if (!$e instanceof \Exception && !$e instanceof \Throwable) {
-            throw new \InvalidArgumentException('Exception/Throwable expected, got ' . gettype($e) . ' / ' . Utils::getClass($e));
+        if ($e instanceof \JsonSerializable) {
+            return (array) $e->jsonSerialize();
         }
 
-        $previousText = '';
+        $data = [
+            'class' => Utils::getClass($e),
+            'message' => $e->getMessage(),
+            'code' => (int) $e->getCode(),
+            'file' => $e->getFile().':'.$e->getLine(),
+        ];
+
+        if ($e instanceof \SoapFault) {
+            if (isset($e->faultcode)) {
+                $data['faultcode'] = $e->faultcode;
+            }
+
+            if (isset($e->faultactor)) {
+                $data['faultactor'] = $e->faultactor;
+            }
+
+            if (isset($e->detail)) {
+                if (is_string($e->detail)) {
+                    $data['detail'] = $e->detail;
+                } elseif (is_object($e->detail) || is_array($e->detail)) {
+                    $data['detail'] = $this->toJson($e->detail, true);
+                }
+            }
+        }
+
+        $trace = $e->getTrace();
+        foreach ($trace as $frame) {
+            if (isset($frame['file'])) {
+                $data['trace'][] = $frame['file'].':'.$frame['line'];
+            }
+        }
+
         if ($previous = $e->getPrevious()) {
-            do {
-                $previousText .= ', ' . Utils::getClass($previous) . '(code: ' . $previous->getCode() . '): ' . $previous->getMessage() . ' at ' . $previous->getFile() . ':' . $previous->getLine();
-            } while ($previous = $previous->getPrevious());
+            $data['previous'] = $this->normalizeException($previous, $depth + 1);
         }
 
-        $str = '[object] (' . Utils::getClass($e) . '(code: ' . $e->getCode() . '): ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine() . $previousText . ')';
-        if ($this->includeStacktraces) {
-            $str .= "\n[stacktrace]\n" . $e->getTraceAsString() . "\n";
-        }
-
-        return $str;
+        return $data;
     }
 
     protected function convertToString($data)

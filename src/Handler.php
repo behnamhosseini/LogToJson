@@ -28,6 +28,7 @@ class Handler extends ExceptionHandler
             throw $ex;
         };
         $content=$this->content($e,$config);
+        dd($content);
         $logger->error('',$content);
     }
 
