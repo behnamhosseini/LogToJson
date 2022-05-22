@@ -23,16 +23,3 @@ You may also publish config file:
 ```
 php artisan vendor:publish --provider=Behnamhosseini\LogToJson\Providers\LogServiceProvider
 ```
-
-## Usage
-
-All you have to do is change a line of code in (`app\Exceptions\Handler.php`) and then you can implement the settings from the configuration file you published (config / logToJson).
-
-```
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-```
-to
-```
-use Behnamhosseini\LogToJson\Handler as ExceptionHandler;
-
-```
