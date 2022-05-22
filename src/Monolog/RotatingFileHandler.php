@@ -41,7 +41,7 @@ class RotatingFileHandler extends Handler
     /**
      * {@inheritdoc}
      */
-    public function close()
+    public function close()  : void
     {
         parent::close();
 
@@ -88,7 +88,7 @@ class RotatingFileHandler extends Handler
     /**
      * {@inheritdoc}
      */
-    protected function write(array $record)
+    protected function write(array $record)  : void
     {
         // on the first record written, if the log is new, we should rotate (once per day)
         if (null === $this->mustRotate) {

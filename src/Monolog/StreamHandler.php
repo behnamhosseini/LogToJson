@@ -51,7 +51,7 @@ class StreamHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    public function close()
+    public function close()  : void
     {
 
         if ($this->url && is_resource($this->stream)) {
@@ -84,7 +84,7 @@ class StreamHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    protected function write(array $record)
+    protected function write(array $record) : void
     {
         if (!is_resource($this->stream)) {
             if (null === $this->url || '' === $this->url) {
