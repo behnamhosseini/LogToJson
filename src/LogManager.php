@@ -46,7 +46,7 @@ class LogManager extends LM
         });
     }
 
-    protected function get($name)
+    protected function get($name, ?array $config = null)
     {
         try {
             return $this->channels[$name] ?? with($this->resolve($name), function ($logger) use ($name) {
@@ -71,7 +71,7 @@ class LogManager extends LM
         ]);
     }
 
-    protected function resolve($name)
+    protected function resolve($name, ?array $config = null)
     {
         $config = $this->configurationFor($name);
 
